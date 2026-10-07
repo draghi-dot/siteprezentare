@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Linkedin, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 
 export function Footer() {
   return (
@@ -21,7 +21,7 @@ export function Footer() {
                 className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
                 aria-label="LinkedIn"
               >
-                <Linkedin size={20} />
+                <Image src="/logos/linkedin.png" alt="" width={20} height={20} className="h-5 w-5 rounded-sm" />
                 <span className="text-sm">LinkedIn</span>
               </a>
             </div>
@@ -34,6 +34,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
               >
+                <Image src="/logos/freelancer.jpg" alt="" width={24} height={18} className="h-[18px] w-auto" />
                 <span>Freelancer</span>
                 <ExternalLink size={14} />
               </a>
@@ -44,6 +45,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
               >
+                <Image src="/logos/99designs.png" alt="" width={20} height={20} className="h-5 w-5 rounded-sm" />
                 <span>99designs</span>
                 <ExternalLink size={14} />
               </a>

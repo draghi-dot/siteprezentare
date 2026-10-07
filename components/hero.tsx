@@ -22,13 +22,13 @@ export function Hero() {
         </h1>
         <div className="space-y-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto text-left leading-relaxed">
           <p>
-            Graphic Designer with <strong>17+ years of experience</strong> in remote projects for US-based, Australia, and Canada clients.
+            Graphic Designer with <strong>20+ years of experience</strong> in remote projects for US-based, Australia, and Canada clients. Expert in collaborating with multicultural, cross-functional teams across different time zones.
           </p>
           <p>
             Specialised in <strong>advertising & promotional campaigns/materials</strong>, <strong>book and eBook design</strong>, <strong>UI design</strong>, and <strong>customised solutions</strong>.
           </p>
           <p>
-            Proven skills in managing complex projects, cross-cultural communication, and meeting deadlines using <strong>Figma</strong> and <strong>Adobe Creative Suite</strong>.
+            Proven skills in managing complex projects, from the initial brand concept through to implementation across various channels (print, digital, UI/UX, campaigns) and meeting deadlines.
           </p>
         </div>
       </div>

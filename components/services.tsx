@@ -1,28 +1,20 @@
 export function Services() {
   const services = [
     {
-      title: "Logo Design",
-      description: "I create unique and memorable logos that reflect your brand identity.",
+      title: "Book & Editorial Design",
+      description: "Conceptualised and designed interior layout and cover, tailored to specific target audiences and publisher guidelines. Manage complex typography hierarchies, handle final pre-print production or digital book.",
     },
     {
       title: "Corporate Identity",
-      description: "I develop complete corporate identities, from logo to branding materials.",
-    },
-    {
-      title: "Book & eBook Design",
-      description: "I design professional books and eBooks, from cover to interior layout.",
-    },
-    {
-      title: "Web Design",
-      description: "I create modern and functional websites, including landing pages and UI design.",
-    },
-    {
-      title: "Brochures & Print Materials",
-      description: "I design printed materials: brochures, flyers, catalogs and promotional materials.",
+      description: "Builds and maintains the visual image of a company or updates existing visual styles to fit modern market trends.",
     },
     {
       title: "Branding & Advertising",
-      description: "I create complete advertising campaigns and promotional materials for various platforms.",
+      description: "Create visual identities and marketing campaigns that build brand recognition and customer awareness.",
+    },
+    {
+      title: "Web Design",
+      description: "Focuses on converting information architecture, wireframes and sitemaps into design elements that help the user navigate the platform logically and intuitively.",
     },
   ]
 
@@ -34,7 +26,7 @@ export function Services() {
           <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground">Services</h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {services.map((service, index) => (
             <div
               key={index}

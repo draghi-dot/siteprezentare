@@ -15,88 +15,29 @@ import {
 } from "@/components/ui/carousel"
 
 // Real projects from portfolio
-const generateProjects = () => {
-  const projects: Array<{ id: string; title: string; category: string; image: string }> = []
-  
-  // Logo Design (8 images: be-1.jpg to be-8.jpg)
-  for (let i = 1; i <= 8; i++) {
-    projects.push({
-      id: `logo-${i}`,
-      title: `Logo Design ${i}`,
-      category: "Logo",
-      image: `/portfolio/logo/be-${i}.jpg`,
-    })
-  }
-  
-  // Corporate ID (23 images)
-  const corporateIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-  corporateIds.forEach((num, idx) => {
-    projects.push({
-      id: `corporate-id-${num}`,
-      title: `Corporate Identity ${idx + 1}`,
-      category: "Corporate ID",
-      image: `/portfolio/corporate-id/be-id-${num}.jpg`,
-    })
-  })
-  
-  // Brochures (24 images: brochures-1.jpg to brochures-24.jpg, skipping 15)
-  const brochureNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-  brochureNums.forEach((num, idx) => {
-    projects.push({
-      id: `brochure-${num}`,
-      title: `Brochure Design ${idx + 1}`,
-      category: "Brochures",
-      image: `/portfolio/brochures/brochures-${num}.jpg`,
-    })
-  })
-  
-  // Collateral Printed Materials
-  const collateralFiles = [
-    "be-p-1.jpg", "be-p-2.jpg", "be-p-3.jpg", "be-p-4.jpg", "be-p-5.jpg", 
-    "be-p-6.jpg", "be-p-7.jpg", "be-p-8.jpg", "be-p-9.jpg", "be-p-10.jpg",
-    "be-p-11.jpg", "be-p-12.jpg", "be-p-13.jpg", "be-p-14.jpg",
-    "be-p26.jpg", "be-p27.jpg", "be-p28.jpg", "be-p29.jpg", "be-p30.jpg",
-    "be-p31.jpg", "be-p32.jpg", "be-p33.jpg", "be-p34.jpg"
-  ]
-  collateralFiles.forEach((filename, idx) => {
-    projects.push({
-      id: `collateral-${idx + 1}`,
-      title: `Print Material ${idx + 1}`,
-      category: "Collateral",
-      image: `/portfolio/collateral/${filename}`,
-    })
-  })
-  
-  // Web Design - Webpages
-  const webpageNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-  webpageNums.forEach((num, idx) => {
-    projects.push({
-      id: `webpage-${num}`,
-      title: `Web Design ${idx + 1}`,
-      category: "Web Design",
-      image: `/portfolio/web-design/be-w-${num}.jpg`,
-    })
-  })
-  
-  // Web Design - Landing Pages
-  for (let i = 15; i <= 28; i++) {
-    projects.push({
-      id: `landing-${i}`,
-      title: `Landing Page ${i - 14}`,
-      category: "Web Design",
-      image: `/portfolio/web-design/landing-pages/be-w-${i}.jpg`,
-    })
-  }
-  
-  return projects
-}
+const portfolioGroups = [
+  { category: "Books", folder: "books", label: "Book Design", files: ["01-ed-book.jpg", "02-ed-book.jpg", "03-ed-book.jpg", "04-ed-book.jpg", "05-ed-book-starlight.jpg", "pp4-la-and-math.jpg", "pp5-combined.jpg", "pp5-la.jpg", "pp5-math.jpg", "pp5-scinece.jpg", "pp5-social.jpg", "pp6-math.jpg", "pp6-science.jpg", "sp4-ability.jpg", "sp4-la.jpg", "sp4-math-new.jpg", "sp4-science.jpg", "sp5-ability.jpg", "sp6-ability-new.jpg", "sp6-la.jpg", "sp6-math.jpg", "test-pp5-math.jpg", "test-pp6-science.jpg", "test-pp6-social.jpg"] },
+  { category: "Corporate ID", folder: "corporate-id", label: "Corporate Identity", files: ["be-id-1.jpg", "be-id-2.jpg", "be-id-3.jpg", "be-id-7.jpg", "be-id-17.jpg", "be-id-21.jpg", "be-id-22.jpg", "be-id-23.jpg", "logo-1.jpg", "logo-2.jpg", "logo-3.jpg"] },
+  { category: "Collateral", folder: "collateral", label: "Print Material", files: ["be-p33.jpg", "be-p-5.jpg", "be-p-6.jpg", "be-p-10.jpg", "be-p-11.jpg", "be-p-14.jpg", "be-p-30.jpg", "brochures-6.jpg", "brochures-7.jpg", "brochures-10.jpg", "brochures-13.jpg", "brochures-14.jpg", "brochures-17.jpg", "brochures-18.jpg", "brochures-19.jpg", "brochures-20.jpg", "brochures-21.jpg", "brochures-23-b.jpg", "brochures-23.jpg", "brochures-24.jpg"] },
+  { category: "Web Design", folder: "web-design", label: "Web Design", files: ["be-w-1.jpg", "be-w-2.jpg", "be-w-5.jpg", "be-w-7.jpg", "be-w-8.jpg", "be-w-9.jpg", "be-w-10.jpg", "be-w-13.jpg", "be-w-14.jpg", "be-w-15-b.jpg", "be-w-15.jpg", "be-w-16.jpg", "be-w-18.jpg", "be-w-20.jpg", "be-w-21.jpg", "be-w-24.jpg"] },
+]
+
+const generateProjects = () =>
+  portfolioGroups.flatMap((group) =>
+    group.files.map((file, idx) => ({
+      id: `${group.folder}-${idx + 1}`,
+      title: `${group.label} ${idx + 1}`,
+      category: group.category,
+      image: `/portfolio/${group.folder}/${file}`,
+    })),
+  )
 
 const projects = generateProjects()
 
-const categories = ["Logo", "Corporate ID", "Brochures", "Collateral", "Web Design"]
+const categories = portfolioGroups.map((group) => group.category)
 
 export function Portfolio() {
-  const [activeCategory, setActiveCategory] = useState("Logo")
+  const [activeCategory, setActiveCategory] = useState(categories[0])
   const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null)
   const [mobileCarouselApi, setMobileCarouselApi] = useState<CarouselApi>()
 
