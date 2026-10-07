@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Reveal, SectionHeading } from "@/components/reveal"
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
 
 // Real testimonials from clients
@@ -43,8 +44,21 @@ const testimonials = [
   },
 ]
 
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .filter((w) => /^[A-Z]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+
+// Quotes longer than this are clamped with a "Read more" toggle so one fits on screen
+const LONG_QUOTE = 420
+
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length)
@@ -54,60 +68,95 @@ export function Testimonials() {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
+  // Collapse long quotes again when switching testimonial
+  useEffect(() => {
+    setExpanded(false)
+  }, [currentIndex])
+
+  // Auto-advance, paused while hovering, focusing or reading an expanded quote
+  useEffect(() => {
+    if (paused || expanded) return
+    const timer = setInterval(nextTestimonial, 9000)
+    return () => clearInterval(timer)
+  }, [paused, expanded, currentIndex])
+
   const current = testimonials[currentIndex]
+  const isLong = current.text.length > LONG_QUOTE
 
   return (
-    <section id="testimoniale" className="py-24 px-6 bg-white scroll-mt-20">
+    <section id="testimoniale" className="py-20 px-6 bg-muted/40 scroll-mt-20">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">testimonial</p>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground">What Clients Say</h2>
-        </div>
+        <SectionHeading eyebrow="testimonial" title="What Clients Say" />
 
-        <div className="relative">
-          <Quote className="w-16 h-16 text-muted-foreground/20 mx-auto mb-8" />
+        <Reveal>
+          <div
+            className="relative flex items-center bg-background border border-border px-6 pt-12 pb-8 md:px-14 md:pt-14 md:pb-10 shadow-sm md:min-h-[360px]"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={() => setPaused(false)}
+          >
+            <Quote className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 p-3 bg-foreground text-background" />
 
-          <blockquote className="text-center max-w-3xl mx-auto">
-            <p className="text-base md:text-lg lg:text-xl font-serif leading-relaxed mb-6 text-pretty text-foreground">
-              {`"${current.text}"`}
-            </p>
-            <footer>
-              <p className="font-medium text-base text-foreground">{current.author}</p>
-              <p className="text-muted-foreground text-sm">{current.role}</p>
-            </footer>
-          </blockquote>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-6 mt-12">
-            <button
-              onClick={prevTestimonial}
-              className="p-3 border border-border hover:border-foreground hover:bg-muted transition-all duration-300 hover:scale-110 active:scale-95"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft size={20} />
-            </button>
-
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
+            <blockquote key={current.id} className="animate-fade-up w-full text-center" aria-live="polite">
+              <p
+                className={`text-base md:text-lg font-serif leading-relaxed text-pretty text-foreground ${
+                  isLong && !expanded ? "line-clamp-5" : ""
+                }`}
+              >
+                {`"${current.text}"`}
+              </p>
+              {isLong && (
                 <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? "bg-foreground w-8" : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                  }`}
-                  aria-label={`Testimonial ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={nextTestimonial}
-              className="p-3 border border-border hover:border-foreground hover:bg-muted transition-all duration-300 hover:scale-110 active:scale-95"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={20} />
-            </button>
+                  onClick={() => setExpanded((v) => !v)}
+                  className="mt-3 text-sm uppercase tracking-wider text-primary hover:text-foreground transition-colors"
+                >
+                  {expanded ? "Show less" : "Read more"}
+                </button>
+              )}
+              <footer className="mt-8 flex items-center justify-center gap-4 text-left">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 font-serif text-base text-primary">
+                  {initials(current.author)}
+                </span>
+                <div>
+                  <p className="font-medium text-base text-foreground">{current.author}</p>
+                  <p className="text-muted-foreground text-sm">{current.role}</p>
+                </div>
+              </footer>
+            </blockquote>
           </div>
+        </Reveal>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-center gap-6 mt-8">
+          <button
+            onClick={prevTestimonial}
+            className="p-3 border border-border bg-background hover:border-foreground transition-all duration-300 hover:scale-110 active:scale-95"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          <div className="flex gap-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? "bg-foreground w-8" : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                }`}
+                aria-label={`Testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={nextTestimonial}
+            className="p-3 border border-border bg-background hover:border-foreground transition-all duration-300 hover:scale-110 active:scale-95"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
     </section>

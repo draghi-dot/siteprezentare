@@ -5,9 +5,9 @@ import { Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
-const _playfair = Playfair_Display({
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
+const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
 })
@@ -53,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ro">
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${playfair.variable}`}>
       <body className={`font-sans antialiased`}>
         {children}
         <Analytics />

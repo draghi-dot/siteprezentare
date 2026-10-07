@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+import { ChevronLeft, ChevronRight, Expand } from "lucide-react"
+import { SectionHeading } from "@/components/reveal"
 import Image from "next/image"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
@@ -36,6 +38,8 @@ const projects = generateProjects()
 
 const categories = portfolioGroups.map((group) => group.category)
 
+const PAGE_SIZE = 9
+
 export function Portfolio() {
   const [activeCategory, setActiveCategory] = useState(categories[0])
   const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null)
@@ -70,14 +74,40 @@ export function Portfolio() {
   }, [mobileCarouselApi])
 
   const filteredProjects = projects.filter((p) => p.category === activeCategory)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const visibleProjects = filteredProjects.slice(0, visibleCount)
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE)
+  }, [activeCategory])
+
+  // Lightbox navigation within the selected project's category
+  const lightboxList = selectedProject ? projects.filter((p) => p.category === selectedProject.category) : []
+  const lightboxIndex = selectedProject ? lightboxList.findIndex((p) => p.id === selectedProject.id) : -1
+
+  const stepLightbox = useCallback(
+    (dir: number) => {
+      if (lightboxIndex < 0) return
+      const next = (lightboxIndex + dir + lightboxList.length) % lightboxList.length
+      setSelectedProject(lightboxList[next])
+    },
+    [lightboxIndex, lightboxList],
+  )
+
+  useEffect(() => {
+    if (!selectedProject) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") stepLightbox(1)
+      if (e.key === "ArrowLeft") stepLightbox(-1)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [selectedProject, stepLightbox])
 
   return (
     <section id="portofoliu" className="py-24 px-6 bg-white scroll-mt-20">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">portfolio</p>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground">Selected Works</h2>
-        </div>
+        <SectionHeading eyebrow="portfolio" title="Selected Works" />
 
         {/* Desktop View - Grid */}
         <div className="hidden md:block">
@@ -94,13 +124,14 @@ export function Portfolio() {
                 }`}
               >
                 {category}
+                <span className="ml-2 text-xs opacity-60">{projects.filter((p) => p.category === category).length}</span>
               </button>
             ))}
           </div>
 
           {/* Projects Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
+          <div key={activeCategory} className="animate-fade-up grid grid-cols-2 lg:grid-cols-3 gap-6">
+            {visibleProjects.map((project) => (
               <button
                 key={project.id}
                 onClick={() => setSelectedProject(project)}
@@ -114,12 +145,28 @@ export function Portfolio() {
                 />
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/70 transition-all duration-300 flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 text-center text-background transform translate-y-2 group-hover:translate-y-0">
+                    <Expand size={22} strokeWidth={1.5} className="mx-auto mb-3" />
                     <h3 className="font-serif text-xl mb-1">{project.title}</h3>
                     <p className="text-sm uppercase tracking-wider opacity-90">{project.category}</p>
                   </div>
                 </div>
               </button>
             ))}
+          </div>
+
+          {/* Show more */}
+          <div className="mt-12 flex flex-col items-center gap-3">
+            <p className="text-sm text-muted-foreground">
+              Showing {visibleProjects.length} of {filteredProjects.length}
+            </p>
+            {visibleCount < filteredProjects.length && (
+              <button
+                onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                className="px-8 py-3 text-sm uppercase tracking-wider border border-foreground/80 text-foreground transition-all duration-300 hover:bg-foreground hover:text-background"
+              >
+                Show more
+              </button>
+            )}
           </div>
         </div>
 
@@ -228,6 +275,27 @@ export function Portfolio() {
                 className="object-contain"
                 sizes="95vw"
               />
+              {lightboxList.length > 1 && (
+                <>
+                  <button
+                    onClick={() => stepLightbox(-1)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-3 bg-background/80 backdrop-blur hover:bg-background transition-colors"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                  <button
+                    onClick={() => stepLightbox(1)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-3 bg-background/80 backdrop-blur hover:bg-background transition-colors"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs tracking-wider bg-background/80 backdrop-blur">
+                    {lightboxIndex + 1} / {lightboxList.length}
+                  </div>
+                </>
+              )}
             </div>
           )}
         </DialogContent>

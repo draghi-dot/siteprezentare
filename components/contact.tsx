@@ -7,6 +7,7 @@ import { Mail, MapPin, Send, CheckCircle, X, Paperclip } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Reveal, SectionHeading } from "@/components/reveal"
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -88,19 +89,20 @@ export function Contact() {
   return (
     <section id="contact" className="py-24 px-6 bg-white scroll-mt-20">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">contact us</p>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6">Let's Collaborate</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Have a project in mind? Get in touch and let's turn your ideas into reality.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="contact us"
+          title="Let's Collaborate"
+          subtitle="Have a project in mind? Get in touch and let's turn your ideas into reality."
+        />
 
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
+        <Reveal className="grid md:grid-cols-[2fr_3fr] gap-12 lg:gap-20 items-start">
           {/* Contact Info */}
-          <div className="space-y-8">
+          <div className="space-y-8 md:pt-8">
+            <p className="font-serif text-2xl text-foreground leading-snug">
+              Books, brands, campaigns or websites — tell me about your project.
+            </p>
             <div className="flex items-start gap-4">
-              <div className="p-3 bg-muted">
+              <div className="p-3 bg-muted text-foreground">
                 <Mail size={20} className="text-foreground" />
               </div>
               <div>
@@ -115,7 +117,7 @@ export function Contact() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="p-3 bg-muted">
+              <div className="p-3 bg-muted text-foreground">
                 <MapPin size={20} className="text-foreground" />
               </div>
               <div>
@@ -126,41 +128,47 @@ export function Contact() {
           </div>
 
           {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5 bg-background border border-border p-6 md:p-10 shadow-sm">
             <div>
+              <label htmlFor="contact-name" className="block mb-2 text-xs uppercase tracking-wider text-muted-foreground">Name</label>
               <Input
                 type="text"
+                id="contact-name"
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="bg-background border-border focus:border-foreground transition-all duration-300 focus:scale-[1.01]"
+                className="bg-background border-border focus:border-foreground transition-colors duration-300 h-11"
               />
             </div>
             <div>
+              <label htmlFor="contact-email" className="block mb-2 text-xs uppercase tracking-wider text-muted-foreground">Email</label>
               <Input
                 type="email"
+                id="contact-email"
                 placeholder="Email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="bg-background border-border focus:border-foreground transition-all duration-300 focus:scale-[1.01]"
+                className="bg-background border-border focus:border-foreground transition-colors duration-300 h-11"
               />
             </div>
             <div>
+              <label htmlFor="contact-message" className="block mb-2 text-xs uppercase tracking-wider text-muted-foreground">Message</label>
               <Textarea
+                id="contact-message"
                 placeholder="Your Message"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 required
                 rows={6}
-                className="bg-background border-border focus:border-foreground resize-none transition-all duration-300 focus:scale-[1.01]"
+                className="bg-background border-border focus:border-foreground resize-none transition-colors duration-300 min-h-36"
               />
             </div>
             
             {/* File Upload */}
             <div>
-              <label className="block mb-2 text-sm font-medium text-foreground">
+              <label className="block mb-2 text-xs uppercase tracking-wider text-muted-foreground">
                 Attach File (Optional)
               </label>
               <div className="flex items-center gap-2">
@@ -214,14 +222,14 @@ export function Contact() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-12 uppercase tracking-wider text-sm bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
                 <Send size={16} className="ml-2" />
               </Button>
             )}
           </form>
-        </div>
+        </Reveal>
       </div>
     </section>
   )
