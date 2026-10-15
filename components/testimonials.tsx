@@ -7,6 +7,12 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
 // Real testimonials from clients
 const testimonials = [
   {
+    id: 7,
+    text: "In 2018, Stefania (“Stef”) won one of my Freelancer contests to lay out a book in InDesign. It was her first curriculum project, yet she took the time to grasp my design intent fully and delivered a book I was proud to publish. Eight years on, she has designed 24 books for me across five series. Stef communicates clearly, meets her deadlines, and works tirelessly to make each book better than the last. She has been my go-to book designer from the start, and she still is.",
+    author: "Howard Campbell",
+    role: "CEO, Firstmile Publishing Ltd – Alberta, Canada",
+  },
+  {
     id: 1,
     text: "Stefanie brought my visions to life for 2 projects in ways that felt personal, powerful, and polished. She designed the cover for When Trauma Is Your Author and the full layout for the companion journal. Both projects carried emotional weight, and Stefanie handled them with creativity, care, and professionalism. She was timely, responsive, and deeply invested in making sure every detail aligned with my message. If you're looking for a designer who truly gets it and knows how to deliver excellence, Stefanie is the one.",
     author: "Nikguan Lewis",
